@@ -1,0 +1,278 @@
+.footer {
+  background: #f8f9fa;
+  padding: 4rem 2rem 2rem;
+  margin-top: auto;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 3rem;
+
+    .brand {
+      .logo {
+        display: flex;
+        align-items: end;
+        gap: 0.75rem;
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #212353;
+        margin-bottom: 1.5rem;
+
+        .logoContainer {
+          display: flex;
+          align-items: end;
+          gap: 0.25rem;
+          position: relative;
+        }
+
+        .logoCircle1 {
+          width: 16px;
+          height: 16px;
+          background: #8b5cf6;
+          border-radius: 50%;
+        }
+
+        .logoCircle2 {
+          width: 16px;
+          height: 32px;
+          background: #ec4899;
+          border-radius: 8px;
+          margin-right: 0.4rem;
+        }
+      }
+
+      .companyInfo {
+        margin-bottom: 1rem;
+
+        p {
+          font-size: 0.875rem;
+          color: #212353;
+          margin-bottom: 0.25rem;
+          line-height: 1.5;
+        }
+      }
+
+      .contact {
+        color: #212353;
+        font-size: 0.875rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.8;
+      }
+
+      .phone {
+        color: #212353;
+        font-size: 0.875rem;
+        opacity: 0.8;
+      }
+    }
+
+    .section {
+      h3 {
+        font-weight: 600;
+        color: #212353;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+      }
+
+      ul {
+        li {
+          margin-bottom: 0.75rem;
+
+          a {
+            color: #212353;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+            line-height: 1.5;
+            opacity: 0.8;
+
+            &:hover {
+              color: #8b5cf6;
+            }
+          }
+        }
+      }
+
+      .socialIcons {
+        display: flex;
+        gap: 1rem;
+
+        .socialIcon {
+          width: 2.5rem;
+          height: 2.5rem;
+          background: #e5e7eb;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+
+          &:hover {
+            background: #8b5cf6;
+            transform: translateY(-2px);
+          }
+
+          // .iconFacebook,
+          // .iconTwitter,
+          // .iconInstagram {
+          //   width: 1rem;
+          //   height: 1rem;
+          //   border-radius: 2px;
+          // }
+
+          &:hover .iconFacebook,
+          &:hover .iconTwitter,
+          &:hover .iconInstagram {
+            background: white;
+          }
+        }
+      }
+    }
+  }
+
+  .bottom {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .copyright {
+      p {
+        font-size: 0.75rem;
+        color: #212353;
+        margin-bottom: 0.25rem;
+        line-height: 1.4;
+      }
+    }
+
+    .chatButton {
+      .chatIcon {
+        width: 3rem;
+        height: 3rem;
+        background: #8b5cf6;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+
+        &:hover {
+          background: #7c3aed;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+        }
+      }
+    }
+  }
+
+  .chatBubble {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 18px;
+      background: #8b5cf6;
+      border-radius: 12px 12px 12px 4px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .dots {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      gap: 3px;
+      align-items: center;
+
+      span {
+        width: 3px;
+        height: 3px;
+        background: white;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+
+      > * {
+        width: 100%;
+      }
+
+      .brand {
+        text-align: center;
+
+        .logo {
+          justify-content: center;
+        }
+
+        .companyInfo,
+        .contact,
+        .phone {
+          text-align: center;
+        }
+      }
+
+      .section {
+        text-align: center;
+
+        ul {
+          padding: 0;
+          list-style: none;
+        }
+
+        .socialIcons {
+          justify-content: center;
+        }
+      }
+    }
+
+    .bottom {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+      align-items: center;
+    }
+
+    .chatBubble {
+      margin-top: 1rem;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .content {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+}

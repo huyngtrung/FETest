@@ -1,0 +1,99 @@
+.hero {
+  background: white;
+  color: #2d3748;
+  padding: 4rem 2rem;
+  min-height: 70vh;
+  position: relative;
+  overflow: hidden;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    min-height: 500px;
+
+    @media (max-width: 768px) {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      text-align: center;
+    }
+  }
+
+  .content {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40%;
+    z-index: 2;
+
+    @media (max-width: 768px) {
+      position: relative;
+      width: 100%;
+      transform: none;
+      top: auto;
+    }
+
+    .title {
+      font-size: 4.125rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+      color: #2d3748;
+
+      @media (max-width: 768px) {
+        font-size: 2.5rem;
+      }
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      margin-bottom: 2.5rem;
+      color: #718096;
+      line-height: 1.6;
+      max-width: 90%;
+    }
+
+    .cta {
+      display: inline-block;
+      background: #8b5cf6;
+      color: white;
+      padding: 1.2rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #7c3aed;
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  .illustration {
+    position: absolute;
+    right: -2.5%;
+    top: 70%;
+    transform: translateY(-50%);
+    width: 70%;
+    z-index: 1;
+
+    @media (max-width: 768px) {
+      position: relative;
+      width: 100%;
+      transform: none;
+      top: auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .heroImage {
+      width: 100%;
+      height: auto;
+      max-width: 650px;
+    }
+  }
+}

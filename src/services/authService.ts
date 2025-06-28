@@ -1,5 +1,5 @@
 import { LoginResponse, User } from '@/types/auth';
-import { setAuthTokens, removeAuthTokens, getRefreshToken } from '@/lib/auth';
+import { removeAuthTokens, getRefreshToken } from '@/lib/auth';
 
 export class AuthService {
   private static baseUrl =

@@ -1,4 +1,3 @@
-
 export interface Post {
   id: string;
   title: string;
@@ -21,7 +20,15 @@ export interface UpdatePostData {
 }
 
 export interface ApiResponse<T> {
-  data: T;
+  data: T | null;
   message: string;
   success: boolean;
+}
+
+export interface RawPostResponse {
+  posts: Post[];
+  current_page?: number;
+  total_page?: number;
+  total?: number;
+  page_size?: number;
 }

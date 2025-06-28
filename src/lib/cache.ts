@@ -5,7 +5,7 @@ interface CacheItem<T> {
 }
 
 class CacheService {
-  private cache = new Map<string, CacheItem<any>>();
+  private cache = new Map<string, CacheItem<unknown>>();
   private defaultTTL = 5 * 60 * 1000; //5 minutes
 
   set<T>(key: string, data: T, ttl?: number): void {
@@ -29,7 +29,7 @@ class CacheService {
       return null;
     }
 
-    return item.data;
+    return item.data as T;
   }
 
   delete(key: string): void {

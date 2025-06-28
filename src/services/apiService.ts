@@ -1,4 +1,10 @@
-import { Post, CreatePostData, UpdatePostData, ApiResponse } from '@/types/api';
+import {
+  Post,
+  CreatePostData,
+  UpdatePostData,
+  ApiResponse,
+  RawPostResponse,
+} from '@/types/api';
 import { getAuthToken } from '@/lib/auth';
 import { cacheService } from '@/lib/cache';
 
@@ -31,19 +37,19 @@ export class ApiService {
           errorMessage += ` - ${errorText}`;
         }
       } catch (e) {
-        // Ignore parsing errors for error responses
+        throw new Error(`${e}`);
       }
       throw new Error(errorMessage);
     }
 
     const contentType = response.headers.get('content-type') || '';
-    let data: any = null;
+    let data: null = null;
 
     if (contentType.includes('application/json')) {
       try {
         data = await response.json();
       } catch (error) {
-        throw new Error('Invalid JSON response from server');
+        throw new Error(`Invalid JSON response from server ${error}`);
       }
     } else {
       return {
@@ -54,7 +60,7 @@ export class ApiService {
     }
 
     //wrap response in ApiResponse format if it's not already
-    if (data && typeof data === 'object' && !data.hasOwnProperty('success')) {
+    if (data && typeof data === 'object' && !('success' in data)) {
       return {
         data: data,
         message: 'Success',
@@ -62,7 +68,11 @@ export class ApiService {
       };
     }
 
-    return data;
+    return {
+      data,
+      message: 'Empty response or already formatted',
+      success: data ?? false,
+    };
   }
 
   static async getPosts(params?: {
@@ -89,61 +99,40 @@ export class ApiService {
     const cacheKey = `posts_${queryString}`;
 
     //check cache first
-    const cachedData = cacheService.get(cacheKey);
+    const cachedData = cacheService.get<
+      ApiResponse<Post[]> & {
+        pagination?: {
+          current_page: number;
+          total_page: number;
+          total: number;
+          page_size: number;
+        };
+      }
+    >(cacheKey);
     if (cachedData) {
       console.log('Returning cached posts data');
       return cachedData;
     }
 
     try {
-      const response = await this.makeRequest<any>(endpoint);
+      const response = await this.makeRequest<RawPostResponse>(endpoint);
       console.log('API Response:', response);
 
-      let result;
-      if (
-        response.data &&
-        response.data.posts &&
-        Array.isArray(response.data.posts)
-      ) {
-        result = {
-          data: response.data.posts,
-          message: 'Success',
-          success: true,
-          pagination: {
-            current_page: response.data.current_page,
-            total_page: response.data.total_page,
-            total: response.data.total,
-            page_size: response.data.page_size,
-          },
-        };
-      } else if (response.posts && Array.isArray(response.posts)) {
-        result = {
-          data: response.posts,
-          message: 'Success',
-          success: true,
-          pagination: {
-            current_page: response.current_page || 1,
-            total_page: response.total_page || 0,
-            total: response.total || 0,
-            page_size: response.page_size || 10,
-          },
-        };
-      } else {
-        result = {
-          data: [],
-          message: 'No posts found',
-          success: true,
-          pagination: {
-            current_page: 1,
-            total_page: 0,
-            total: 0,
-            page_size: 10,
-          },
-        };
-      }
+      const posts = response.data?.posts ?? [];
+      const result = {
+        data: posts,
+        message: posts.length > 0 ? 'Success' : 'No posts found',
+        success: true,
+        pagination: {
+          current_page: response.data?.current_page ?? 1,
+          total_page: response.data?.total_page ?? 0,
+          total: response.data?.total ?? 0,
+          page_size: response.data?.page_size ?? 10,
+        },
+      };
 
-      //cache the result
-      cacheService.set(cacheKey, result, 3 * 60 * 1000); // Cache for 3 minutes
+      // Cache result
+      cacheService.set(cacheKey, result, 3 * 60 * 1000);
       return result;
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -190,9 +179,10 @@ export class ApiService {
 
   static async deletePost(id: string): Promise<ApiResponse<null>> {
     try {
-      const response = await this.makeRequest<any>(`/posts/${id}`, {
+      const response = await this.makeRequest<null>(`/posts/${id}`, {
         method: 'DELETE',
       });
+      console.log(response);
 
       const result = {
         data: null,
@@ -217,8 +207,7 @@ export class ApiService {
   static async getPostTags(): Promise<ApiResponse<string[]>> {
     const cacheKey = 'post_tags';
 
-    //check cache first
-    const cachedTags = cacheService.get(cacheKey);
+    const cachedTags = cacheService.get<ApiResponse<string[]>>(cacheKey);
     if (cachedTags) {
       console.log('Returning cached tags data');
       return cachedTags;
@@ -226,7 +215,7 @@ export class ApiService {
 
     const result = await this.makeRequest<string[]>('/posts/tags');
 
-    //cache the result for longer time since tags don't change often
+    //cache trong 10 phút
     cacheService.set(cacheKey, result, 10 * 60 * 1000);
 
     return result;
